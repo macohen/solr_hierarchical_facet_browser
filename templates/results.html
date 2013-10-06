@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <h1>BVI File Content Browser</h1> 
+    <h2>Found {{ results.hits }} results for {{ request.args['drill']  }}</h2>
+    <h3><a href="/">Start Over</a></h3>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <table class="table table-bordered">
+      <tr>
+	<td>
+	  <div class = "span8">
+	  </div>
+	</td>
+      </tr>
+    </table>
+    <table class="table table-bordered">
+    {% for result in results %}
+    <tr>
+      <td>
+	{% for name, value in result.iteritems() %}
+	<div class="span16">
+	  {% if name == 'id' %}
+	  <div class="row">
+	  Asset ID: {{ value }}
+	  </div>
+	  {% elif name == 'group_s_mv' %}
+	  <div class="row">
+	  Video Groups
+	  </div>
+	  <ul>
+	  {% for group in value %}
+	  <li><a href="/?drill={{ group | convert_to_hierarchy | urlencode }}">{{ group }}</a></li>
+	  {% endfor %}
+	  </ul>
+	  {% elif name == "episode_title1_s" %}
+	  <div class="span8" >
+	    Episode Title1: {{ name }}
+	  </div>
+	  {% elif "_s" in name %}
+	  {{ name }} : {{ value }}
+	  {% endif %}
+	</div>
+	{% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+    </table>
+  </body>
+</html>
