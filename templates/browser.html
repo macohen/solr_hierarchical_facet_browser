@@ -20,7 +20,7 @@
     </thead>
        {% for facet in facets %}
     <tr>
-      <td><a href="/?drill={{ facet[0] | drilldown|urlencode }}">{{ facet[0] }}</a></td>
+      <td><a href="/?drill={{ facet[0] | drilldown | partial_hierarchy | urlencode }}">{{ facet[0] }}</a></td>
       <td>{{ facet[1] }}</td>
     </tr>
        {% endfor %}

@@ -16,7 +16,7 @@
       <tr>
 	<td>
 	  <div class = "span8">
-	  </div>
+ 	  </div>
 	</td>
       </tr>
     </table>
@@ -36,7 +36,7 @@
 	  </div>
 	  <ul>
 	  {% for group in value %}
-	  <li><a href="/?drill={{ group | convert_to_hierarchy | urlencode }}">{{ group }}</a></li>
+	  <li><a href="/?drill={{ group | convert_to_hierarchy | partial_hierarchy | urlencode }}">{{ group }}</a></li>
 	  {% endfor %}
 	  </ul>
 	  {% elif name == "episode_title1_s" %}
