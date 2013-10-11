@@ -64,6 +64,13 @@ def make_hier(group):
 def add_slash(group):
     return group + "/"
 
+def clean_results(results):
+    for result in results:
+        file_name = result['file_name_s']
+        if file_name != None:
+            result['file_name_s'] = file_name.replace("/Users/cohenma/work/freewheel_logs/", "http://localhost:5000/")
+    return results
+        
 @app.route('/')
 def query():
     drill_down = "0/"
@@ -89,6 +96,7 @@ def query():
     if browse == True:
         return render_template('browser.html', facets=facet_fields)
     else:
+        results = clean_results(results)
         return render_template('results.html', results=results)
 
 def build_facet_pairs(facets):
