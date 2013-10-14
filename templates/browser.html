@@ -14,13 +14,13 @@
     {% for field, facets in facets.iteritems() %}
     <thead>
       <tr>
-	<th>Group</th>
+	<th>Hierarchy: {{ facet_names[field] }}</th>
 	<th>Count</th>
       </tr>
     </thead>
-       {% for facet in facets %}
+    {% for facet in facets %}
     <tr>
-      <td><a href="/?drill={{ facet[0] | drilldown | partial_hierarchy | urlencode }}">{{ facet[0] }}</a></td>
+      <td><a href="{{ url_for('query', drill_down= facet[0] | drilldown | partial_hierarchy | urlencode, search_field= field | urlencode, start=0)}}">{{ facet[0] }}</a></td>
       <td>{{ facet[1] }}</td>
     </tr>
        {% endfor %}

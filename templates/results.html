@@ -5,49 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery.js"></script>
   </head>
   <body>
     <h1>BVI File Content Browser</h1> 
-    <h2>Found {{ results.hits }} results for {{ request.args['drill']  }}</h2>
-    <h3><a href="/">Start Over</a></h3>
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
-    <table class="table table-bordered">
-      <tr>
-	<td>
-	  <div class = "span8">
- 	  </div>
-	</td>
-      </tr>
-    </table>
+    <h2>Displaying {{ 0 }} - {{ 10 }} of {{ results.hits }} results for {{ 0 }}</h2>
+    <h3><a href="{{ url_for("query") }}">Start Over</a></h3>
+    <ul class="pager">
+    </ul>
     <table class="table table-bordered">
     {% for result in results %}
     <tr>
       <td>
-	{% for name, value in result.iteritems() %}
-	<div class="span16">
-	  {% if name == 'id' %}
 	  <div class="row">
-	  Asset ID: {{ value }}
+	    <div class="span6">
+	      Asset ID: {{ result['id'] }}
+	    </div>
+	    <div class="span4" >
+	      Episode Title1: {{ result["episode_title1_s"] }}
+	    </div>
+	    <div class="span4" >
+	      Series: {{ result["series_s"] }}
+	    </div>
 	  </div>
-	  {% elif name == 'group_s_mv' %}
 	  <div class="row">
-	  Video Groups
+	       <div class="span6">
+		 Video Groups
+		 <ul>
+		   {% for group in result["group_s_mv"] %}
+		   <li><a href="{{ url_for("query", search_field="groups_s_mv", drill_down=group | convert_to_hierarchy | partial_hierarchy | urlencode )}}">{{ group }}</a></li>
+		   {% endfor %}
+		 </ul>
+	       </div>
+	       <div class="span4">
+		 <a href="{{ url_for("show_bvi_file", file_name=result["file_structure"]["file_name"], file_date=result["file_structure"]["date"]) }}">View Source BVI Feed</a>
+	       </div>
+	       <div class="span8">
+		 <b>Available Fields</b><br>
+		 {% for name, value in result.iteritems() %}
+		 {{ name }}, 
+		 {% endfor %}
+	       </div>
 	  </div>
-	  <ul>
-	  {% for group in value %}
-	  <li><a href="/?drill={{ group | convert_to_hierarchy | partial_hierarchy | urlencode }}">{{ group }}</a></li>
-	  {% endfor %}
-	  </ul>
-	  {% elif name == "episode_title1_s" %}
-	  <div class="span8" >
-	    Episode Title1: {{ name }}
-	  </div>
-	  {% elif "_s" in name %}
-	  {{ name }} : {{ value }}
-	  {% endif %}
-	</div>
-	{% endfor %}
       </td>
     </tr>
     {% endfor %}
